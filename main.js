@@ -2,11 +2,11 @@ import './css/base.css';
 import * as THREE from 'three';
 import fragmentShader from './shaders/fragment.glsl';
 
-// extract "variation" parameter from the url
+// Extract "variation" parameter from the URL
 const urlParams = new URLSearchParams(window.location.search);
 const variation = urlParams.get('var') || 0;
 
-// add selected class to link based on variation parameter
+// Add selected class to link based on variation parameter
 document.querySelector(`[data-var="${variation}"]`).classList.add('selected');
 
 // Scene setup
@@ -25,33 +25,45 @@ const camera = new THREE.OrthographicCamera(-aspect, aspect, 1, -1, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 document.body.appendChild(renderer.domElement);
 
-const onPointerMove = (e) => { vMouse.set(e.pageX, e.pageY) }
+const onPointerMove = (e) => {
+  vMouse.set(e.pageX, e.pageY);
+};
 document.addEventListener('mousemove', onPointerMove);
 document.addEventListener('pointermove', onPointerMove);
-document.body.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
+document.body.addEventListener('touchmove', function (e) {
+  e.preventDefault();
+}, { passive: false });
 
 // Plane geometry covering the full viewport
 const geo = new THREE.PlaneGeometry(1, 1);  // Scaled to cover full viewport
 
+// Load text texture
+const loader = new THREE.TextureLoader();
+const textTexture = loader.load('path/to/your/text_texture.png', () => {
+  textTexture.minFilter = THREE.LinearFilter;
+  textTexture.magFilter = THREE.LinearFilter;
+  textTexture.format = THREE.RGBAFormat;
+});
+
 // Shader material creation
 const mat = new THREE.ShaderMaterial({
-  vertexShader: /* glsl */`
+  vertexShader: /* glsl */ `
     varying vec2 v_texcoord;
     void main() {
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         v_texcoord = uv;
     }`,
-  fragmentShader, // most of the action happening in the fragment
+  fragmentShader, // Most of the action happening in the fragment
   uniforms: {
     u_mouse: { value: vMouseDamp },
     u_resolution: { value: vResolution },
-    u_pixelRatio: { value: 2 }
+    u_pixelRatio: { value: 2 },
+    u_text: { value: textTexture }
   },
   defines: {
     VAR: variation
   }
 });
-
 
 // Mesh creation
 const quad = new THREE.Mesh(geo, mat);
@@ -63,17 +75,17 @@ camera.position.z = 1;  // Set appropriately for orthographic
 // Animation loop to render
 let time, lastTime = 0;
 const update = () => {
-  // calculate delta time
+  // Calculate delta time
   time = performance.now() * 0.001;
   const dt = time - lastTime;
   lastTime = time;
 
-  // ease mouse motion with damping
+  // Ease mouse motion with damping
   for (const k in vMouse) {
-    if (k == 'x' || k == 'y') vMouseDamp[k] = THREE.MathUtils.damp(vMouseDamp[k], vMouse[k], 8, dt);
+    if (k === 'x' || k === 'y') vMouseDamp[k] = THREE.MathUtils.damp(vMouseDamp[k], vMouse[k], 8, dt);
   }
 
-  // render scene
+  // Render scene
   requestAnimationFrame(update);
   renderer.render(scene, camera);
 };
@@ -100,4 +112,4 @@ const resize = () => {
 };
 resize();
 
-window.addEventListener('resize', resize)
+window.addEventListener('resize', resize);
