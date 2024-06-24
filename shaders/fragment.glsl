@@ -96,21 +96,28 @@ void main() {
     float sdf;
     if (VAR == 0) {
         /* sdf circle with stroke param adjusted by sdf circle */
-        sdf = sdRoundRect(st, vec2(size), roundness);
-        sdf = stroke(sdf, 0.0, borderSize, sdfCircle) * 3.0;
+        sdf = sdCircle(st, vec2(0.5));
+        sdf = stroke(sdf, 0.73, 0.19, sdfCircle) * 4.0;
     } else if (VAR == 1) {
+        /* sdf circle with fill param adjusted by sdf circle */
+        sdf = sdPoly(st - vec2(0.5, 0.45), 0.4, 3);
+         sdf = stroke(sdf, 0.13, 0.14, sdfCircle) * 4.0;
+        sdf = fill(sdf, 0.06, sdfCircle) * 1.4;
+    } else if (VAR == 2) {
         /* sdf circle with fill param adjusted by sdf circle */
         sdf = sdCircle(st, vec2(0.5));
         sdf = fill(sdf, 0.6, sdfCircle) * 1.2;
-    } else if (VAR == 2) {
+    } else if (VAR == 3) {
         /* sdf round rectangle with stroke param adjusted by sdf circle */
         sdf = sdRoundRect(st, vec2(size), roundness);
         sdf = stroke(sdf, 0.0, borderSize, sdfCircle) * 4.0;
-    } else if (VAR == 3) {
-        /* sdf circle with fill param adjusted by sdf circle */
-        sdf = sdPoly(st - vec2(0.5, 0.45), 0.3, 3);
-        sdf = fill(sdf, 0.05, sdfCircle) * 1.4;
+    } else if (VAR == 4) {
+        /* sdf round rectangle with stroke param adjusted by sdf circle */
+        sdf = sdRoundRect(st, vec2(size), roundness);
+        sdf = stroke(sdf, 0.13, 0.14, sdfCircle) * 4.0;
+        sdf = stroke(sdf, 0.0, borderSize, sdfCircle) * 4.0;
     }
+    
     
     /* Change border color to green */
    vec3 color = vec3(0.3137, 0.9608, 0.6275) * sdf;

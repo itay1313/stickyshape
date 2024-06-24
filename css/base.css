@@ -111,16 +111,13 @@ a:focus-visible {
 	text-transform: uppercase;
 	padding: var(--page-padding);
 	position: relative;
-	display: grid;
+	display: flex;
 	z-index: 1000;
 	width: 100%;
 	height: 100%;
 	grid-row-gap: 1rem;
 	grid-column-gap: 2rem;
 	pointer-events: none;
-	justify-items: start;
-	grid-template-columns: auto auto;
-	grid-template-areas: 'title' 'back' 'archive' 'github' 'sponsor' 'demos' 'tags';
 }
 
 .main-header #cdawrap {
@@ -129,6 +126,8 @@ a:focus-visible {
 
 .main-header a {
 	pointer-events: auto;
+	color: white;
+	font-size: 1.5rem;
 }
 
 .main-header__title {
@@ -178,7 +177,7 @@ a:focus-visible {
 	opacity: 0.8;
 }
 
-a.selected {
+a.header-logo {
 	font-weight: bold;
 	color: var(--color-link-hover);
 	position: absolute;
@@ -206,15 +205,22 @@ body {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	grid-template-columns: auto auto auto auto 1fr;
-	grid-template-rows: auto auto;
-	align-content: space-between;
-	grid-template-areas: 'title back github archive sponsor' 'tags tags demos demos demos';
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+			mix-blend-mode: difference;
 }
 
 .main-header #cdawrap,
 .main-header__wrapper {
 	justify-self: end;
+}
+
+.pagination {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1em;
 }
 
 .content {
